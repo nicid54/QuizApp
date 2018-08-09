@@ -3,12 +3,14 @@ package com.example.android.quizapp;
 import android.content.res.Resources;
 import android.graphics.RadialGradient;
 import android.graphics.drawable.Drawable;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,14 +19,20 @@ import java.util.Collections;
 public class MainActivity extends AppCompatActivity {
 
     private ArrayList<QuizCard> cardList;
+    private ArrayList<Integer> radioButtonViews;
+    private int correctScore = 0;
+    private int incorrectScore = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //initialize the card data and hide the quiz buttons
+        //initialize the card data, hide the quiz buttons, and disable the submit button
         initCardData();
         showRadioButtons(false);
+        (findViewById(R.id.submit_button)).setEnabled(false);
+        loadCard(cardList.get(0));
     }
 
     /**
@@ -64,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
             showRadioButtons(true);
 
             //Load the radio button views
-            ArrayList<Integer> radioButtonViews = new ArrayList<>(Arrays.asList(R.id.answer1,
+            radioButtonViews = new ArrayList<>(Arrays.asList(R.id.answer1,
                                                                                 R.id.answer2,
                                                                                 R.id.answer3,
                                                                                 R.id.answer4));
@@ -94,68 +102,69 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Loads a QuizCard when the submit button is clicked
+     * Checks if the submitted answer was correct, tallies the score, and loads the next quiz card
      * @param view is the submit button
      */
     public void submitButtonClicked(View view) {
-        QuizCard card = cardList.get(0);
-        int i = 5;
-        loadCard(cardList.get(0));
+
+       //if the selected answer is correct
+       if (getCheckedAnswer().equals((cardList.get(0)).getAnswerCorrect())) {
+           correctScore++;
+       }
+       else {
+           incorrectScore++;
+       }
+
+       //remove the current card and load the next card
+       cardList.remove(0);
+       if (!cardList.isEmpty()) {
+
+           loadCard(cardList.get(0));
+       }//if no other card, then show score
+       else {
+
+           String toastMessage = "Correct: " + correctScore + " Incorrect: " + incorrectScore;
+           (Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT)).show();
+           (findViewById(R.id.submit_button)).setEnabled(false);
+       }
     }
 
     /**
-     * Deselects all other radio buttons when a radio button is checked
+     * Unchecks all other radio buttons when a radio button is checked
      * (a RadioGroup was not used because of the layout limitations this method handles the selection logic)
      * @param view is the checked radio button
      */
     public void radioButtonChecked(View view) {
 
-        RadioButton button;
-        if (view.getId() != R.id.answer1) {
-            button = findViewById(R.id.answer1);
-            button.setChecked(false);
+        //uncheck all non-selected radio buttons
+        for (Integer viewId : radioButtonViews) {
+            if (viewId != view.getId()) {
+                ((RadioButton) findViewById(viewId)).setChecked(false);
+            }
         }
 
-        if (view.getId() != R.id.answer2) {
-            button = findViewById(R.id.answer2);
-            button.setChecked(false);
-        }
-
-        if (view.getId() != R.id.answer3) {
-            button = findViewById(R.id.answer3);
-            button.setChecked(false);
-        }
-
-        if (view.getId() != R.id.answer4) {
-            button =  findViewById(R.id.answer4);
-            button.setChecked(false);
-        }
+        //enable the submit button
+        (findViewById(R.id.submit_button)).setEnabled(true);
     }
 
 
     /**
-     * Returns the currently checked radio button
-     * @return is the currently checked button or -1 if no button is checked
+     * Returns the String answer of the currently checked radio button
+     * @return is the String of the currently selected answer or an empty String
+     * if nothing is checked
      */
-    private int getCheckedRadioButton() {
+    private String getCheckedAnswer() {
 
-        if (((RadioButton) findViewById(R.id.answer1)).isChecked()) {
-            return R.id.answer1;
+        //find the answer of the checked radio button
+        for (Integer viewId: radioButtonViews) {
+            RadioButton radioButton = findViewById(viewId);
+
+            if (radioButton.isChecked()) {
+                return (radioButton.getText()).toString();
+            }
         }
 
-        if (((RadioButton) findViewById(R.id.answer2)).isChecked()) {
-            return R.id.answer2;
-        }
-
-        if (((RadioButton) findViewById(R.id.answer3)).isChecked()) {
-            return R.id.answer3;
-        }
-
-        if (((RadioButton) findViewById(R.id.answer4)).isChecked()) {
-            return R.id.answer4;
-        }
-
-        return -1; //No radio buttons checked
+        return ""; //No radio buttons checked
     }
 
 

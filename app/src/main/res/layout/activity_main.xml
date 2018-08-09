@@ -43,9 +43,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="@dimen/text_margin_left"
+            android:layout_marginLeft="@dimen/text_margin_left_answer"
             android:layout_marginTop="@dimen/text_margin_top"
-            android:layout_toRightOf="@id/answer1"
+            android:layout_alignParentLeft="true"
             android:text="Answer 2"
             android:onClick="radioButtonChecked"/>
 
@@ -65,13 +65,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/answer2"
-            android:layout_marginLeft="@dimen/text_margin_left"
+            android:layout_marginLeft="@dimen/text_margin_left_answer"
             android:layout_marginTop="@dimen/text_margin_top"
-            android:layout_toRightOf="@id/answer3"
+            android:layout_alignParentLeft="true"
             android:text="Answer 4"
             android:onClick="radioButtonChecked"/>
 
         <Button
+            android:id="@+id/submit_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
