@@ -1,5 +1,6 @@
 
 package com.example.android.quizapp;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class QuizCard {
@@ -10,23 +11,23 @@ public class QuizCard {
     private QuizType type;
     private int imageId;
     private String question;
-    private ArrayList<String> answerChoice;
-    private String answerCorrect;
+    private ArrayList<String> answerList;
+    private ArrayList<String> correctAnswerList;
 
     /**
      * Constructor for QuizCard: stores card image, question, possible answer choices, and the correct answer
      * @param type is the type of QuizCard
      * @param imageId is the image id on the card
      * @param question is the question for the card
-     * @param answerChoice is the list of possible answers to choose from
-     * @param answerCorrect is the correct answer for the card
+     * @param answerList is the list of possible answers to choose from
+     * @param correctAnswerList is the correct answer for the card
      */
-    public QuizCard(QuizType type, int imageId, String question, ArrayList<String> answerChoice, String answerCorrect) {
+    public QuizCard(QuizType type, int imageId, String question, ArrayList<String> answerList, ArrayList<String> correctAnswerList) {
         this.type = type;
         this.imageId = imageId;
         this.question = question;
-        this.answerChoice = answerChoice;
-        this.answerCorrect = answerCorrect;
+        this.answerList = answerList;
+        this.correctAnswerList = correctAnswerList;
     }
 
     /**
@@ -54,18 +55,18 @@ public class QuizCard {
     }
 
     /**
-     * Returns and ArrayList of the answers to choose from for the quiz
+     * Returns an ArrayList of the answers to choose from for the quiz
      * @return is the list of answers
      */
-    public ArrayList<String> getAnswerChoice() {
-        return answerChoice;
+    public ArrayList<String> getAnswerList() {
+        return answerList;
     }
 
     /**
      * Returns a String of the correct answer for the QuizCard
      * @return the correct answer
      */
-    public String getAnswerCorrect() {
-        return answerCorrect;
+    public ArrayList<String> getCorrectAnswerList() {
+        return correctAnswerList;
     }
 }

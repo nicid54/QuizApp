@@ -3,4 +3,5 @@
     <dimen name="text_margin_top">20dp</dimen>
     <dimen name="text_margin_left">80dp</dimen>
     <dimen name="text_margin_left_answer">250dp</dimen>
+    <dimen name="text_width">100dp</dimen>
 </resources>
