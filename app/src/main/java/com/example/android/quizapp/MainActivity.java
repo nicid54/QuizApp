@@ -8,10 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Checkable;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -31,9 +33,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //initialize the card data, hide the quiz buttons, and disable the submit button
+        //initialize the card data and loads the first quiz card
         initCardData();
-        (findViewById(R.id.submit_button)).setEnabled(false);
         loadCard(cardList.get(0));
     }
 
@@ -78,6 +79,12 @@ public class MainActivity extends AppCompatActivity {
      * @param card the input QuizCard
      */
     private void loadCard(QuizCard card) {
+
+        //Disable the submit button
+        findViewById(R.id.submit_button).setEnabled(false);
+
+        //Load the card question text
+        ((TextView) findViewById(R.id.card_question)).setText(card.getQuestion());
 
         //Load the card image
         Drawable image = getResources().getDrawable(card.getImageId());
@@ -175,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
      * Unchecks all other radio buttons when a radio button is checked
      * (a RadioGroup was not used because of the layout limitations this method handles the selection logic)
      *
-     * @param view is the checked radio button
+     * @param view is the checked radio button view
      */
     public void radioButtonChecked(View view) {
 
@@ -190,6 +197,23 @@ public class MainActivity extends AppCompatActivity {
         (findViewById(R.id.submit_button)).setEnabled(true);
     }
 
+    /**
+     * Enables the submit button if at least one checkbox is checked
+     * @param view is the checkbox view
+     */
+    public void checkboxChecked(View view) {
+
+        //if at least one checkbox is checked, then enable the submit button
+        for (Integer viewId : checkboxViews) {
+            if (((CheckBox) findViewById(viewId)).isChecked()) {
+                findViewById(R.id.submit_button).setEnabled(true);
+                return;
+            }
+        }
+
+        //no checkboxes are checked, so disable the submit button
+        findViewById(R.id.submit_button).setEnabled(false);
+    }
 
     /**
      * Compares the list of selected answers in the quiz views with the correct answer list
