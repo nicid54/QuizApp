@@ -12,6 +12,8 @@
         android:layout_marginTop="@dimen/text_margin_top"
         android:layout_weight="5"
         android:text="Question"
+        android:textSize="18sp"
+        android:textStyle="bold"
         android:textAlignment="center" />
 
     <ImageView
@@ -114,6 +116,14 @@
             android:layout_alignParentRight="true"
             android:text="Answer 4"
             android:onClick="checkboxChecked"/>
+
+        <EditText
+            android:id="@+id/edit_text"
+            android:layout_width="@dimen/text_width"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="@dimen/text_margin_top"/>
 
         <Button
             android:id="@+id/submit_button"

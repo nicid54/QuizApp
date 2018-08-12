@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class QuizCard {
     public enum QuizType {
-        CHECKBOX, RADIOBUTTON, TEXTENTRY
+        START, CHECKBOX, RADIOBUTTON, TEXTENTRY, END
     }
 
     private QuizType type;
