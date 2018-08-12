@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -22,6 +23,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -63,11 +65,13 @@ public class MainActivity extends AppCompatActivity {
                 R.id.checkbox4));
 
         //Load the EditText Views
-        mEditTextViews = new ArrayList<Integer>(Arrays.asList(R.id.edit_text));
+        mEditTextViews = new ArrayList<Integer>();
+        mEditTextViews.add(R.id.edit_text);
     }
 
     /**
      * Initializes the Quiz Card data for the quiz app
+     * ToDo: Parse QuizCard data from XML File with JSON
      */
     private void initCardData() {
 
@@ -75,17 +79,24 @@ public class MainActivity extends AppCompatActivity {
         mCardList = new ArrayList<QuizCard>();
 
         //Cover Card
-        String startTitle = "Endangered Animal Quiz!";
+        String startTitle = getResources().getString(R.string.start_card_title);
         mCardList.add(new QuizCard(QuizCard.QuizType.START,
-                R.drawable.kakapo,
+                R.drawable.black_rhino,
                 startTitle,
                 null,
                 null));
 
         //Card 1 data
-        String question1 = "What endangered animal is this?";
-        ArrayList<String> answerList1 = new ArrayList<>(Arrays.asList("Sumatran Tiger", "Kangaroo", "Dog", "Bird"));
-        ArrayList<String> correctAnswerList1 = new ArrayList<>(Arrays.asList("Sumatran Tiger"));
+        String question1 = getResources().getString(R.string.card1_question);
+        ArrayList<String> answerList1 = new ArrayList<>();
+        answerList1.add(getResources().getString(R.string.card1_answer1));
+        answerList1.add(getResources().getString(R.string.card1_answer2));
+        answerList1.add(getResources().getString(R.string.card1_answer3));
+        answerList1.add(getResources().getString(R.string.card1_answer4));
+
+        ArrayList<String> correctAnswerList1 = new ArrayList<>();
+        correctAnswerList1.add(getResources().getString(R.string.card1_answer1));
+
         mCardList.add(new QuizCard(QuizCard.QuizType.RADIOBUTTON,
                 R.drawable.sumatran_tiger,
                 question1,
@@ -93,33 +104,73 @@ public class MainActivity extends AppCompatActivity {
                 correctAnswerList1));
 
         //Card 2 data
-        String question2 = "What is true about the Kakapo?";
-        ArrayList<String> answerList2 = new ArrayList<>(Arrays.asList("Native to New Zealand",
-                                                                        "Can fly for long distances",
-                                                                        "Can live for nearly 100 years",
-                                                                        "Also known as the owl parrot"));
-        ArrayList<String> correctAnswerList2 = new ArrayList<>(Arrays.asList("Native to New Zealand",
-                                                                        "Can live for nearly 100 years",
-                                                                        "Also known as the owl parrot"));
+        String question2 = getResources().getString(R.string.card2_question);
+        ArrayList<String> answerList2 = new ArrayList<>();
+        answerList2.add(getResources().getString(R.string.card2_answer1));
+        answerList2.add(getResources().getString(R.string.card2_answer2));
+        answerList2.add(getResources().getString(R.string.card2_answer3));
+        answerList2.add(getResources().getString(R.string.card2_answer4));
+
+        ArrayList<String> correctAnswerList2 = new ArrayList<>();
+        correctAnswerList2.add(getResources().getString(R.string.card2_answer1));
+        correctAnswerList2.add(getResources().getString(R.string.card2_answer2));
+        correctAnswerList2.add(getResources().getString(R.string.card2_answer3));
+
         mCardList.add(new QuizCard(QuizCard.QuizType.CHECKBOX,
                 R.drawable.kakapo,
                 question2,
                 answerList2,
                 correctAnswerList2));
 
+        //Card 3 data
+        String question3 = getResources().getString(R.string.card3_question);
+        ArrayList<String> answerList3 = new ArrayList<>();
+        answerList3.add(getResources().getString(R.string.card3_answer1));
+        answerList3.add(getResources().getString(R.string.card3_answer2));
+        answerList3.add(getResources().getString(R.string.card3_answer3));
+        answerList3.add(getResources().getString(R.string.card3_answer4));
+
+        ArrayList<String> correctAnswerList3 = new ArrayList<>();
+        correctAnswerList3.add(getResources().getString(R.string.card3_answer1));
+
+        mCardList.add(new QuizCard(QuizCard.QuizType.RADIOBUTTON,
+                R.drawable.sea_turtle,
+                question3,
+                answerList3,
+                correctAnswerList3));
+
         //Card 4 data
-        String question4 = "What endangered animal is this?";
-        ArrayList<String> correctAnswerList4 = new ArrayList<>(Arrays.asList("Panda"));
+        String question4 = getResources().getString(R.string.card4_question);
+        ArrayList<String> answerList4 = new ArrayList<>();
+        answerList4.add(getResources().getString(R.string.card4_answer1));
+        answerList4.add(getResources().getString(R.string.card4_answer2));
+        answerList4.add(getResources().getString(R.string.card4_answer3));
+        answerList4.add(getResources().getString(R.string.card4_answer4));
+
+        ArrayList<String> correctAnswerList4 = new ArrayList<>();
+        correctAnswerList4.add(getResources().getString(R.string.card4_answer1));
+        correctAnswerList4.add(getResources().getString(R.string.card4_answer2));
+
+        mCardList.add(new QuizCard(QuizCard.QuizType.CHECKBOX,
+                R.drawable.orangutan,
+                question4,
+                answerList4,
+                correctAnswerList4));
+
+        //Card 5 data
+        String question5 = getResources().getString(R.string.card5_question);
+        ArrayList<String> correctAnswerList5 = new ArrayList<>();
+        correctAnswerList5.add(getResources().getString(R.string.card5_answer1));
         mCardList.add(new QuizCard(QuizCard.QuizType.TEXTENTRY,
-                                    R.drawable.sumatran_tiger,
-                                    question4,
-                                    new ArrayList<String>(),
-                                    correctAnswerList4));
+                                    R.drawable.panda,
+                                    question5,
+                                    null,
+                                    correctAnswerList5));
 
         //Donate Card
-        String endTitle = "Please Donate to the World Wildlife Fund!";
+        String endTitle = getResources().getString(R.string.end_card_title);
         mCardList.add(new QuizCard(QuizCard.QuizType.END,
-                                    R.drawable.kakapo,
+                                    R.drawable.elephant,
                                     endTitle,
                                     null,
                                     null));
@@ -160,13 +211,15 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Loads an input QuizCard's data into the views and shows the correct quiz type
-     *
+     * ToDo: Swap out card questions with Fragments
      * @param card the input QuizCard
      */
     private void loadCard(QuizCard card) {
 
         //Load the card question text
-        ((TextView) findViewById(R.id.card_question)).setText(card.getQuestion());
+        TextView questionTextView = findViewById(R.id.card_question);
+        questionTextView.setText(card.getQuestion());
+        questionTextView.setTextSize(getResources().getDimension(R.dimen.question_text_size));
 
         //Load the card image
         Drawable image = getResources().getDrawable(card.getImageId());
@@ -214,7 +267,8 @@ public class MainActivity extends AppCompatActivity {
             buttonEnabledState = true;
             buttonText = "Start";
 
-            //Add Listener to check if text has been input
+            //Set Start Quiz Title Text Size
+            questionTextView.setTextSize(getResources().getDimension(R.dimen.start_title_text_size));
 
         }
         else { //End Quiz Donate Card
@@ -227,6 +281,9 @@ public class MainActivity extends AppCompatActivity {
             //Display the Donate Button
             buttonEnabledState = true;
             buttonText = "Donate";
+
+            //Set Quiz Title Text Size
+            questionTextView.setTextSize(getResources().getDimension(R.dimen.start_title_text_size));
         }
 
         //Set the submit button text and the initial state
@@ -280,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else if (card.getType() == QuizCard.QuizType.TEXTENTRY) { //quiz type is edit text
 
-            mCorrectScore += isAnswerCorrect(new ArrayList<Integer>(Arrays.asList(R.id.edit_text)), card.getCorrectAnswerList()) ? 1 : 0;
+            mCorrectScore += isAnswerCorrect(mEditTextViews, card.getCorrectAnswerList()) ? 1 : 0;
         }
         else if (card.getType() == QuizCard.QuizType.END) { //donate card
 
@@ -297,8 +354,10 @@ public class MainActivity extends AppCompatActivity {
         //if there are two quiz cards remaining (last is donate card), display results of the quiz
         if (mCardList.size() == 2) {
             //Display the results of the quiz once
-            String toastMessage = "You answered " + mCorrectScore + " questions correctly!";
-            (Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT)).show();
+            String toastMessage = getResources().getString(R.string.toast_score_message, mCorrectScore);
+            Toast toast = Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
         }
 
         //if there are more quiz cards to load, remove the current QuizCard and load the next one
@@ -382,7 +441,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * Depending on an input boolean hides or shows the views provided in the ArrayList
+     * Depending on an input boolean hides or shows the views provided in the ArrayList.
+     * If the views are hidden then they are also unchecked
      * @param viewList is the ArrayList of View Ids to hide or show
      * @param isVisable is the boolean of whether to hide or show the views
      */
@@ -391,7 +451,13 @@ public class MainActivity extends AppCompatActivity {
         int visibility = isVisable ? View.VISIBLE : View.GONE;
 
         for (Integer viewId : viewList) {
-            (findViewById(viewId)).setVisibility(visibility);
+
+            //uncheck all RadioButtons and Checkboxes when hiding them
+            if (!isVisable && findViewById(viewId) instanceof CompoundButton) {
+                ((CompoundButton) findViewById(viewId)).setChecked(false);
+            }
+
+            findViewById(viewId).setVisibility(visibility);
         }
     }
 

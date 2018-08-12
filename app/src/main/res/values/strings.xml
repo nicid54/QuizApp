@@ -1,3 +1,48 @@
 <resources>
-    <string name="app_name">Quiz App</string>
+    <string name="app_name">Wildlife Quiz</string>
+
+    <!-- Start Card -->
+    <string name="start_card_title">What do you know about endangered animals?</string>
+
+    <!-- Card 1 -->
+    <string name="card1_question">What endangered animal is this?</string>
+    <string name="card1_answer1">Sumatran Tiger</string>
+    <string name="card1_answer2">Tasmanian Tiger</string>
+    <string name="card1_answer3">Leopard</string>
+    <string name="card1_answer4">Jaguar</string>
+
+    <!-- Card 2 -->
+    <string name="card2_question">What is true about the Kakapo?</string>
+    <string name="card2_answer1">Native to New Zealand</string>
+    <string name="card2_answer2">Also known as the owl parrot</string>
+    <string name="card2_answer3">Can live for nearly 100 years</string>
+    <string name="card2_answer4">Can fly for long distances</string>
+
+    <!-- Card 3 -->
+    <string name="card3_question">Which species of sea turtle is most affected by the turtleshell trade? </string>
+    <string name="card3_answer1">Hawksbill Turtle</string>
+    <string name="card3_answer2">Loggerhead Turtle</string>
+    <string name="card3_answer3">Leatherback Turtle</string>
+    <string name="card3_answer4">Green Turtle</string>
+
+    <!-- Card 4 -->
+    <string name="card4_question">What is true about the Orangutan?</string>
+    <string name="card4_answer1">Name means "person of the forest"</string>
+    <string name="card4_answer2">Habitat loss and poaching threaten its survival</string>
+    <string name="card4_answer3">Communicate by tapping on coconut husks</string>
+    <string name="card4_answer4">Native to Brazil</string>
+
+    <!-- Card 5 -->
+    <string name="card5_question">What is the primary food source of the Giant Panda?</string>
+    <string name="card5_answer1">bamboo</string>
+
+    <!-- EditText Card -->
+    <string name="edit_text_hint_string">Answer Here</string>
+
+    <!-- END Card -->
+    <string name="end_card_title">Please Donate</string>
+
+    <!-- Final Score Toast -->
+    <string name="toast_score_message">You answered %1$d questions correctly</string>
+
 </resources>
