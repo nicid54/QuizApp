@@ -20,101 +20,104 @@
 
     <ImageView
         android:id="@+id/card_image"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="@dimen/fill_layout_weight"
         android:layout_weight="45"
-        android:scaleType="centerCrop"/>
+        android:layout_gravity="center_horizontal"
+        android:scaleType="fitXY"
+        android:src="@drawable/sumatran_tiger"/>
 
     <RelativeLayout
         android:id="@+id/card_answers"
         android:layout_width="match_parent"
         android:layout_height="@dimen/fill_layout_weight"
-        android:layout_weight="25">
+        android:layout_weight="30"
+        android:layout_marginBottom="5dp">
 
         <RadioButton
             android:id="@+id/radio_button1"
-            android:layout_width="@dimen/text_width"
-            android:layout_height="@dimen/text_height"
+            android:layout_width="@dimen/text_width_land"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="@dimen/text_margin_left"
-            android:layout_marginTop="@dimen/text_margin_top"
+            android:layout_marginLeft="@dimen/text_margin_left_land"
+            android:layout_marginTop="@dimen/text_margin_top_land"
             android:text="Answer 1"
             android:onClick="radioButtonChecked"/>
 
         <RadioButton
             android:id="@+id/radio_button2"
-            android:layout_width="@dimen/text_width"
-            android:layout_height="@dimen/text_height"
+            android:layout_width="@dimen/text_width_land"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginRight="@dimen/text_margin_right"
-            android:layout_marginTop="@dimen/text_margin_top"
+            android:layout_marginRight="@dimen/text_margin_right_land"
+            android:layout_marginTop="@dimen/text_margin_top_land"
             android:layout_alignParentRight="true"
             android:text="Answer 2"
             android:onClick="radioButtonChecked"/>
 
         <RadioButton
             android:id="@+id/radio_button3"
-            android:layout_width="@dimen/text_width"
-            android:layout_height="@dimen/text_height"
+            android:layout_width="@dimen/text_width_land"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/radio_button1"
-            android:layout_marginLeft="@dimen/text_margin_left"
-            android:layout_marginTop="@dimen/text_margin_top"
+            android:layout_marginLeft="@dimen/text_margin_left_land"
+            android:layout_marginTop="@dimen/text_margin_top_land"
             android:text="Answer 3"
             android:onClick="radioButtonChecked"/>
 
         <RadioButton
             android:id="@+id/radio_button4"
-            android:layout_width="@dimen/text_width"
-            android:layout_height="@dimen/text_height"
+            android:layout_width="@dimen/text_width_land"
+            android:layout_height="wrap_content"
             android:layout_below="@id/radio_button2"
-            android:layout_marginRight="@dimen/text_margin_right"
-            android:layout_marginTop="@dimen/text_margin_top"
+            android:layout_marginRight="@dimen/text_margin_right_land"
+            android:layout_marginTop="@dimen/text_margin_top_land"
             android:layout_alignParentRight="true"
             android:text="Answer 4"
             android:onClick="radioButtonChecked"/>
 
         <CheckBox
             android:id="@+id/checkbox1"
-            android:layout_width="@dimen/text_width"
-            android:layout_height="@dimen/text_height"
+            android:layout_width="@dimen/text_width_land"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="@dimen/text_margin_left"
-            android:layout_marginTop="@dimen/text_margin_top"
+            android:layout_marginLeft="@dimen/text_margin_left_land"
+            android:layout_marginTop="@dimen/text_margin_top_land"
             android:text="Answer 1"
             android:onClick="checkboxChecked"/>
 
         <CheckBox
             android:id="@+id/checkbox2"
-            android:layout_width="@dimen/text_width"
-            android:layout_height="@dimen/text_height"
+            android:layout_width="@dimen/text_width_land"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_marginRight="@dimen/text_margin_right"
-            android:layout_marginTop="@dimen/text_margin_top"
+            android:layout_marginRight="@dimen/text_margin_right_land"
+            android:layout_marginTop="@dimen/text_margin_top_land"
             android:text="Answer 2"
             android:onClick="checkboxChecked"/>
 
         <CheckBox
             android:id="@+id/checkbox3"
-            android:layout_width="@dimen/text_width"
-            android:layout_height="@dimen/text_height"
+            android:layout_width="@dimen/text_width_land"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/checkbox1"
-            android:layout_marginLeft="@dimen/text_margin_left"
-            android:layout_marginTop="@dimen/text_margin_top"
+            android:layout_marginLeft="@dimen/text_margin_left_land"
+            android:layout_marginTop="@dimen/text_margin_top_land"
             android:text="Answer 3"
             android:onClick="checkboxChecked"/>
 
         <CheckBox
             android:id="@+id/checkbox4"
-            android:layout_width="@dimen/text_width"
-            android:layout_height="@dimen/text_height"
+            android:layout_width="@dimen/text_width_land"
+            android:layout_height="wrap_content"
             android:layout_below="@id/checkbox2"
-            android:layout_marginRight="@dimen/text_margin_right"
-            android:layout_marginTop="@dimen/text_margin_top"
+            android:layout_marginRight="@dimen/text_margin_right_land"
+            android:layout_marginTop="@dimen/text_margin_top_land"
             android:layout_alignParentRight="true"
             android:text="Answer 4"
             android:onClick="checkboxChecked"/>
@@ -124,21 +127,23 @@
             android:layout_width="@dimen/text_width"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="@dimen/text_margin_top"
+            android:layout_above="@id/submit_button"
+            android:layout_marginTop="@dimen/text_margin_top_land"
             android:hint="@string/edit_text_hint_string"
             android:textAlignment="center"/>
+
+        <Button
+            android:id="@+id/submit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/submit_margin_top"
+            android:layout_marginBottom="@dimen/submit_margin_bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="Submit"
+            android:onClick="submitButtonClicked"/>
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/submit_button"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="6"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="@dimen/submit_margin_bottom"
-        android:text="Submit"
-        android:onClick="submitButtonClicked"/>
+
 
 </LinearLayout>
