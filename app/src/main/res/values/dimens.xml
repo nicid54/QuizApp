@@ -7,8 +7,9 @@
     <dimen name="text_margin_left_land">50dp</dimen>
     <dimen name="text_margin_right_land">20dp</dimen>
     <dimen name="text_width">170dp</dimen>
-    <dimen name="text_width_land">190dp</dimen>
-    <dimen name="text_height">40dp</dimen>
+    <dimen name="text_width_land">200dp</dimen>
+    <dimen name="text_height">60dp</dimen>
+    <dimen name="text_height_land">40dp</dimen>
     <dimen name="start_title_text_size">9sp</dimen>
     <dimen name="question_text_size">7sp</dimen>
     <dimen name="question_padding">10dp</dimen>

@@ -37,7 +37,7 @@
         <RadioButton
             android:id="@+id/radio_button1"
             android:layout_width="@dimen/text_width_land"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/text_height_land"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/text_margin_left_land"
@@ -48,7 +48,7 @@
         <RadioButton
             android:id="@+id/radio_button2"
             android:layout_width="@dimen/text_width_land"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/text_height_land"
             android:layout_alignParentTop="true"
             android:layout_marginRight="@dimen/text_margin_right_land"
             android:layout_marginTop="@dimen/text_margin_top_land"
@@ -59,7 +59,7 @@
         <RadioButton
             android:id="@+id/radio_button3"
             android:layout_width="@dimen/text_width_land"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/text_height_land"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/radio_button1"
             android:layout_marginLeft="@dimen/text_margin_left_land"
@@ -70,7 +70,7 @@
         <RadioButton
             android:id="@+id/radio_button4"
             android:layout_width="@dimen/text_width_land"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/text_height_land"
             android:layout_below="@id/radio_button2"
             android:layout_marginRight="@dimen/text_margin_right_land"
             android:layout_marginTop="@dimen/text_margin_top_land"
@@ -81,7 +81,7 @@
         <CheckBox
             android:id="@+id/checkbox1"
             android:layout_width="@dimen/text_width_land"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/text_height_land"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/text_margin_left_land"
@@ -92,7 +92,7 @@
         <CheckBox
             android:id="@+id/checkbox2"
             android:layout_width="@dimen/text_width_land"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/text_height_land"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="@dimen/text_margin_right_land"
@@ -103,7 +103,7 @@
         <CheckBox
             android:id="@+id/checkbox3"
             android:layout_width="@dimen/text_width_land"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/text_height_land"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/checkbox1"
             android:layout_marginLeft="@dimen/text_margin_left_land"
@@ -114,7 +114,7 @@
         <CheckBox
             android:id="@+id/checkbox4"
             android:layout_width="@dimen/text_width_land"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/text_height_land"
             android:layout_below="@id/checkbox2"
             android:layout_marginRight="@dimen/text_margin_right_land"
             android:layout_marginTop="@dimen/text_margin_top_land"

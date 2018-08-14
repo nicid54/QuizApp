@@ -6,6 +6,7 @@ import android.graphics.RadialGradient;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.graphics.TypefaceCompatUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -43,8 +44,16 @@ public class MainActivity extends AppCompatActivity {
 
         //initialize the answer view lists, card data, and loads the first quiz card
         initViewLists();
-        initCardData();
-        loadCard(mCardList.get(0));
+
+        if (savedInstanceState != null) {
+            QuizCard currentQuizCard = getQuizCardFromBundle(savedInstanceState);
+            loadCard(currentQuizCard,false);
+            reloadQuizCardStateFromBundle(savedInstanceState);
+        }
+        else {
+            initCardData();
+            loadCard(mCardList.get(0), true);
+        }
         initListeners();
     }
 
@@ -182,9 +191,9 @@ public class MainActivity extends AppCompatActivity {
     private void initListeners() {
 
         //add a listener to check if the user has input text and enable the submit button
-        final EditText mEditText = findViewById(mEditTextViews.get(0));
-
-        mEditText.addTextChangedListener(new TextWatcher() {
+        //final EditText mEditText = findViewById(mEditTextViews.get(0));
+        final EditText editText = findViewById(R.id.edit_text);
+        editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -192,13 +201,19 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                Button submitButton = findViewById(R.id.submit_button);
 
-                if (isTextEditEmpty(mEditText)) {
-                    submitButton.setEnabled(false);
-                }
-                else {
-                    submitButton.setEnabled(true);
+                //this method will get called automatically because the EditText is reset
+                //to an empty string when the App orientation changes, so check to make
+                //sure that the current card is and EditText Quiz
+                if (mCardList.get(0).getType() == QuizCard.QuizType.TEXTENTRY) {
+
+                    Button submitButton = findViewById(R.id.submit_button);
+
+                    if (isTextEditEmpty(editText)) {
+                        submitButton.setEnabled(false);
+                    } else {
+                        submitButton.setEnabled(true);
+                    }
                 }
             }
 
@@ -214,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
      * ToDo: Swap out card questions with Fragments
      * @param card the input QuizCard
      */
-    private void loadCard(QuizCard card) {
+    private void loadCard(QuizCard card, boolean shuffleAnswers) {
 
         //Load the card question text
         TextView questionTextView = findViewById(R.id.card_question);
@@ -225,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
         Drawable image = getResources().getDrawable(card.getImageId());
         ((ImageView) findViewById(R.id.card_image)).setImageDrawable(image);
 
-        //Initialize default submit button text and enabled state
+        //Initialize default submit button text
         String buttonText = "Submit";
         boolean buttonEnabledState = false;
 
@@ -238,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
             setViewsVisible(mEditTextViews, false);
 
             //Load the answer data
-            loadQuizAnswers(mRadioButtonViews, card.getAnswerList());
+            loadQuizAnswers(mRadioButtonViews, card.getAnswerList(), shuffleAnswers);
         } else if (card.getType() == QuizCard.QuizType.CHECKBOX) { //Checkbox quiz
 
             //Show the checkboxes and hide the other answer submission types
@@ -247,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
             setViewsVisible(mEditTextViews,false);
 
             //Load the answer data
-            loadQuizAnswers(mCheckboxViews, card.getAnswerList());
+            loadQuizAnswers(mCheckboxViews, card.getAnswerList(), shuffleAnswers);
         }
         else if (card.getType() == QuizCard.QuizType.TEXTENTRY){ //Edit Text quiz
 
@@ -298,10 +313,12 @@ public class MainActivity extends AppCompatActivity {
      * @param buttonViewIds is the ArrayList of View Ids for the quiz buttons
      * @param quizAnswers   is the ArrayList of quiz answers
      */
-    private void loadQuizAnswers(ArrayList<Integer> buttonViewIds, ArrayList<String> quizAnswers) {
+    private void loadQuizAnswers(ArrayList<Integer> buttonViewIds, ArrayList<String> quizAnswers, boolean shuffleAnswers) {
 
         //Randomly Sort the ArrayList of answers
-        Collections.shuffle(quizAnswers);
+        if (shuffleAnswers) {
+            Collections.shuffle(quizAnswers);
+        }
 
         //Load the answers in the button views
         for (int i = 0; i < buttonViewIds.size(); i++) {
@@ -349,8 +366,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-
-
         //if there are two quiz cards remaining (last is donate card), display results of the quiz
         if (mCardList.size() == 2) {
             //Display the results of the quiz once
@@ -363,7 +378,7 @@ public class MainActivity extends AppCompatActivity {
         //if there are more quiz cards to load, remove the current QuizCard and load the next one
         if (mCardList.size() != 1) {
             mCardList.remove(0);
-            loadCard(mCardList.get(0));
+            loadCard(mCardList.get(0),true);
         }
     }
 
@@ -470,4 +485,122 @@ public class MainActivity extends AppCompatActivity {
         return editText.getText().toString().isEmpty();
     }
 
+    /**
+     * Takes an ArrayList of View IDs and gets the order of the previously shuffled questions
+     * This is used to ensure that the question order remains the same when the App is rotated
+     * @param viewIdList
+     */
+    private void saveQuizAnswerOrder(QuizCard quizCard, ArrayList<Integer> viewIdList, ArrayList<Integer> checkedViewIdList) {
+
+        ArrayList<String> answerListOrder = new ArrayList<>();
+
+        //save the answers in the view in the current order in the array list
+        for (Integer viewId : viewIdList) {
+            CompoundButton compoundButton = findViewById(viewId);
+            answerListOrder.add(compoundButton.getText().toString());
+
+            //add view ids of checked buttons to the checked list
+            if (compoundButton.isChecked()) {
+                checkedViewIdList.add(viewId);
+            }
+        }
+
+        //replace the QuizCards default answers with the answers in the current order
+        quizCard.setAnswerList(answerListOrder);
+    }
+
+    /**
+     * Stores App state data when it is placed in the background or the screen is rotated
+     * @param outState
+     */
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        writeBundleData(outState);
+    }
+
+    /**
+     * Writes out the QuizCard App state data to an input bundle
+     * @param outState is the bundle data to write to
+     */
+    private void writeBundleData(Bundle outState) {
+
+        QuizCard currentQuizCard = mCardList.get(0);
+        ArrayList<Integer> checkedViewList = new ArrayList<>();
+
+        //If current card is radio button quiz
+        if (currentQuizCard.getType() == QuizCard.QuizType.RADIOBUTTON) {
+            saveQuizAnswerOrder(currentQuizCard, mRadioButtonViews, checkedViewList);
+        }
+        else if (currentQuizCard.getType() == QuizCard.QuizType.CHECKBOX) {
+            saveQuizAnswerOrder(currentQuizCard, mCheckboxViews, checkedViewList);
+        }
+        else if (currentQuizCard.getType() == QuizCard.QuizType.TEXTENTRY) {
+            //the answer order doesn't matter for the EditText quiz, but save the current
+            //string value in the EditText View
+            EditText editText = findViewById(R.id.edit_text);
+            outState.putString("editTextMessage", editText.getText().toString());
+        }
+
+        //save the Card List, the list of the IDs of the checked Views
+        //and the total questions correct score
+        outState.putParcelableArrayList("cardList", mCardList);
+        outState.putIntegerArrayList("checkedViewList", checkedViewList);
+        outState.putInt("correctScore", mCorrectScore);
+    }
+
+    /**
+     * Reads from an input Bundle to setup the QuizCard App data and returns the ch
+     * @param savedState is the input bundle
+     */
+    private QuizCard getQuizCardFromBundle(Bundle savedState) {
+
+        ArrayList<QuizCard> quizCardList = savedState.getParcelableArrayList("cardList");
+
+        if (!quizCardList.isEmpty()) {
+            return quizCardList.get(0);
+        }
+
+        return null;
+    }
+
+    /**
+     * Reloads the QuizCard state data from the bundle including the answer data and and button states
+     * @param savedState is the saved instance state bundle
+     */
+    private void reloadQuizCardStateFromBundle(Bundle savedState) {
+
+        //repopulate member variables
+        mCardList = savedState.getParcelableArrayList("cardList");
+        mCorrectScore = savedState.getInt("correctScore");
+        ArrayList<Integer> checkedViewList = savedState.getIntegerArrayList("checkedViewList");
+
+        //get the current card
+        QuizCard currentQuizCard = mCardList.get(0);
+
+        //if the current card is a RadioButton quiz, then check the currently selected button
+        if (currentQuizCard.getType() == QuizCard.QuizType.RADIOBUTTON && !checkedViewList.isEmpty()) {
+            RadioButton radioButton = findViewById(checkedViewList.get(0));
+            radioButton.setChecked(true); //ToDo: make sure that this doesn't fire the onClick method (radioButtonChecked)
+            radioButtonChecked(findViewById(checkedViewList.get(0)));
+        }
+        else if (currentQuizCard.getType() == QuizCard.QuizType.CHECKBOX && !checkedViewList.isEmpty()) {
+            //check all checked checkboxes
+            for (Integer checkedViewId : checkedViewList) {
+                CheckBox checkbox = findViewById(checkedViewId);
+                checkbox.setChecked(true); //ToDo: make sure that this doesn't fire the onClick method (checkboxChecked)
+                checkboxChecked(findViewById(checkedViewId));
+            }
+        }//if the current card is an EditText quiz
+        else if (currentQuizCard.getType() == QuizCard.QuizType.TEXTENTRY) {
+
+            String editTextMessage = savedState.getString("editTextMessage");
+            //if the EditText contained text data, reinstate that information and enable the submit button
+            if (editTextMessage != null && !editTextMessage.isEmpty()) {
+                EditText editText = findViewById(R.id.edit_text);
+                editText.setText(editTextMessage); //unnecessary since EditText automatically retains text for orientation change
+                findViewById(R.id.submit_button).setEnabled(true);
+            }
+        }
+    }
 }

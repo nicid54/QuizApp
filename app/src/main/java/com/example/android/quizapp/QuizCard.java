@@ -1,9 +1,12 @@
 
 package com.example.android.quizapp;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class QuizCard {
+public class QuizCard implements Parcelable {
     public enum QuizType {
         START, CHECKBOX, RADIOBUTTON, TEXTENTRY, END
     }
@@ -63,10 +66,72 @@ public class QuizCard {
     }
 
     /**
+     * Replaces the QuizCard ArrayList of answers with a new ArrayList of answers
+     * @param answerList is the list of answers
+     */
+    public void setAnswerList(ArrayList<String> answerList) {
+        this.answerList = answerList;
+    }
+
+    /**
      * Returns a String of the correct answer for the QuizCard
      * @return the correct answer
      */
     public ArrayList<String> getCorrectAnswerList() {
         return correctAnswerList;
     }
+
+    /**
+     * Parcelable Interface Requirement: returns a description of the object as an integer
+     * @return is the integer description
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Parcelable Interface Requirement: writes the QuizCard data to the parcel
+     * @param parcel
+     * @param i
+     */
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeValue(type);
+        parcel.writeInt(imageId);
+        parcel.writeString(question);
+        parcel.writeStringList(answerList);
+        parcel.writeStringList(correctAnswerList);
+    }
+
+    /**
+     * Parcelable Interface Requiremnt: creates a singleton with a method to read the written
+     * QuizCard data.
+     */
+    public static final Parcelable.Creator<QuizCard> CREATOR = new Parcelable.Creator<QuizCard>() {
+
+         /**
+          * Creates a new QuizCard by reading the stored data in the parcel
+          * @param parcel
+          * @return
+          */
+         @Override
+         public QuizCard createFromParcel(Parcel parcel) {
+
+             QuizType quizType = (QuizType) parcel.readValue(QuizType.class.getClassLoader());
+             int imageId = parcel.readInt();
+             String question = parcel.readString();
+             ArrayList<String> answerList = new ArrayList<>();
+             parcel.readStringList(answerList);
+             ArrayList<String> correctAnswerList = new ArrayList<>();
+             parcel.readStringList(correctAnswerList);
+
+             return new QuizCard(quizType, imageId, question, answerList, correctAnswerList);
+         }
+
+        @Override
+        public QuizCard[] newArray(int i) {
+            return new QuizCard[0];
+        }
+    };
 }
