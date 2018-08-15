@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Wildlife Quiz</string>
 
+    <!-- Card Image -->
+    <string name="card_image_desc">The quiz card image</string>
+
     <!-- Start Card -->
     <string name="start_card_title">What do you know about endangered animals?</string>
 
@@ -19,7 +22,7 @@
     <string name="card2_answer4">Can fly for long distances</string>
 
     <!-- Card 3 -->
-    <string name="card3_question">Which species of sea turtle is most affected by the turtleshell trade? </string>
+    <string name="card3_question">The turtleshell trade most threatens which species of turtle?</string>
     <string name="card3_answer1">Hawksbill Turtle</string>
     <string name="card3_answer2">Loggerhead Turtle</string>
     <string name="card3_answer3">Leatherback Turtle</string>
@@ -41,6 +44,7 @@
 
     <!-- END Card -->
     <string name="end_card_title">Please Donate</string>
+    <string name="donate_website">"https://worldwildlife.org"</string>
 
     <!-- Final Score Toast -->
     <string name="toast_score_message">You answered %1$d questions correctly</string>

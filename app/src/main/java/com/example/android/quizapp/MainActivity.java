@@ -1,22 +1,16 @@
 package com.example.android.quizapp;
 
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.RadialGradient;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.provider.MediaStore;
-import android.support.v4.graphics.TypefaceCompatUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.Checkable;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,7 +18,6 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -45,12 +38,16 @@ public class MainActivity extends AppCompatActivity {
         //initialize the answer view lists, card data, and loads the first quiz card
         initViewLists();
 
+        //if the App orientation changed, then load the card data from the bundle
         if (savedInstanceState != null) {
             QuizCard currentQuizCard = getQuizCardFromBundle(savedInstanceState);
-            loadCard(currentQuizCard,false);
-            reloadQuizCardStateFromBundle(savedInstanceState);
+
+            if(currentQuizCard != null) {
+                loadCard(currentQuizCard, false);
+                reloadQuizCardStateFromBundle(savedInstanceState);
+            }
         }
-        else {
+        else { //if the app is being run for the first time, then initialize the card data
             initCardData();
             loadCard(mCardList.get(0), true);
         }
@@ -74,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 R.id.checkbox4));
 
         //Load the EditText Views
-        mEditTextViews = new ArrayList<Integer>();
+        mEditTextViews = new ArrayList<>();
         mEditTextViews.add(R.id.edit_text);
     }
 
@@ -85,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     private void initCardData() {
 
         //Create new ArrayList
-        mCardList = new ArrayList<QuizCard>();
+        mCardList = new ArrayList<>();
 
         //Cover Card
         String startTitle = getResources().getString(R.string.start_card_title);
@@ -191,8 +188,7 @@ public class MainActivity extends AppCompatActivity {
     private void initListeners() {
 
         //add a listener to check if the user has input text and enable the submit button
-        //final EditText mEditText = findViewById(mEditTextViews.get(0));
-        final EditText editText = findViewById(R.id.edit_text);
+        final EditText editText = findViewById(mEditTextViews.get(0));
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -362,7 +358,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
             intent.addCategory(Intent.CATEGORY_BROWSABLE);
-            intent.setData(Uri.parse("https://worldwildlife.org"));
+            intent.setData(Uri.parse(getResources().getString(R.string.donate_website)));
             startActivity(intent);
         }
 
@@ -486,23 +482,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Takes an ArrayList of View IDs and gets the order of the previously shuffled questions
-     * This is used to ensure that the question order remains the same when the App is rotated
-     * @param viewIdList
+     * Takes an ArrayList of View IDs and stores the order of the shuffled answer questions
+     * in the input QuizCard. This is used to ensure that the question order remains the same
+     * when the App is orientation is changed (rotated)
+     * @param quizCard is the
+     * @param viewIdList is list of view ids
      */
-    private void saveQuizAnswerOrder(QuizCard quizCard, ArrayList<Integer> viewIdList, ArrayList<Integer> checkedViewIdList) {
+    private void saveQuizAnswerOrder(QuizCard quizCard, ArrayList<Integer> viewIdList) {
 
         ArrayList<String> answerListOrder = new ArrayList<>();
 
         //save the answers in the view in the current order in the array list
         for (Integer viewId : viewIdList) {
-            CompoundButton compoundButton = findViewById(viewId);
-            answerListOrder.add(compoundButton.getText().toString());
+            TextView textView = findViewById(viewId);
+            answerListOrder.add(textView.getText().toString());
 
-            //add view ids of checked buttons to the checked list
-            if (compoundButton.isChecked()) {
-                checkedViewIdList.add(viewId);
-            }
         }
 
         //replace the QuizCards default answers with the answers in the current order
@@ -510,8 +504,46 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Takes in a list of View IDs and returns a list of View Ids for the views that are checked
+     * @param viewIdList the list of View IDs to search through
+     * @return is the list of IDs of the Views that are checked
+     */
+    private ArrayList<Integer> getCheckedViewList(ArrayList<Integer> viewIdList) {
+
+        ArrayList<Integer> checkedViewIdList = new ArrayList<>();
+
+        //makes a list of checked views
+        for (Integer viewId : viewIdList) {
+
+            if (((CompoundButton) findViewById(viewId)).isChecked()) {
+                checkedViewIdList.add(viewId);
+            }
+        }
+
+        return checkedViewIdList;
+    }
+
+    /**
+     * Takes in an ArrayList of IDs of Checkbox Views and checks them
+     * @param viewIdList is the list of IDs of the Views that should be checked
+     */
+    private void checkCheckboxViews(ArrayList<Integer> viewIdList) {
+
+        //check all checked checkboxes
+        for (Integer checkedViewId : viewIdList) {
+            CompoundButton compoundButton = findViewById(checkedViewId);
+            compoundButton.setChecked(true); //Note: This doesn't trigger the onClick method (checkboxChecked)
+        }
+
+        //if a checkbox is checked, then enable the submit button
+        if (!viewIdList.isEmpty()) {
+            findViewById(R.id.submit_button).setEnabled(true);
+        }
+    }
+
+    /**
      * Stores App state data when it is placed in the background or the screen is rotated
-     * @param outState
+     * @param outState is the bundle that the card data should be written to
      */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -528,17 +560,19 @@ public class MainActivity extends AppCompatActivity {
         QuizCard currentQuizCard = mCardList.get(0);
         ArrayList<Integer> checkedViewList = new ArrayList<>();
 
-        //If current card is radio button quiz
+        //Handle writing out the important card data for each QuizCard type
         if (currentQuizCard.getType() == QuizCard.QuizType.RADIOBUTTON) {
-            saveQuizAnswerOrder(currentQuizCard, mRadioButtonViews, checkedViewList);
+            saveQuizAnswerOrder(currentQuizCard, mRadioButtonViews);
+            checkedViewList = getCheckedViewList(mRadioButtonViews);
         }
         else if (currentQuizCard.getType() == QuizCard.QuizType.CHECKBOX) {
-            saveQuizAnswerOrder(currentQuizCard, mCheckboxViews, checkedViewList);
+            saveQuizAnswerOrder(currentQuizCard, mCheckboxViews);
+            checkedViewList = getCheckedViewList(mCheckboxViews);
         }
         else if (currentQuizCard.getType() == QuizCard.QuizType.TEXTENTRY) {
             //the answer order doesn't matter for the EditText quiz, but save the current
             //string value in the EditText View
-            EditText editText = findViewById(R.id.edit_text);
+            EditText editText = findViewById(mEditTextViews.get(0));
             outState.putString("editTextMessage", editText.getText().toString());
         }
 
@@ -556,6 +590,10 @@ public class MainActivity extends AppCompatActivity {
     private QuizCard getQuizCardFromBundle(Bundle savedState) {
 
         ArrayList<QuizCard> quizCardList = savedState.getParcelableArrayList("cardList");
+
+        if (quizCardList == null) {
+            return null;
+        }
 
         if (!quizCardList.isEmpty()) {
             return quizCardList.get(0);
@@ -579,17 +617,17 @@ public class MainActivity extends AppCompatActivity {
         QuizCard currentQuizCard = mCardList.get(0);
 
         //if the current card is a RadioButton quiz, then check the currently selected button
-        if (currentQuizCard.getType() == QuizCard.QuizType.RADIOBUTTON && !checkedViewList.isEmpty()) {
-            RadioButton radioButton = findViewById(checkedViewList.get(0));
-            radioButton.setChecked(true); //ToDo: make sure that this doesn't fire the onClick method (radioButtonChecked)
-            radioButtonChecked(findViewById(checkedViewList.get(0)));
+        if (currentQuizCard.getType() == QuizCard.QuizType.RADIOBUTTON) {
+            if (checkedViewList != null && !checkedViewList.isEmpty()) {
+                RadioButton radioButton = findViewById(checkedViewList.get(0));
+                radioButton.setChecked(true); //Note: This doesn't trigger the onClick method (radioButtonChecked)
+                radioButtonChecked(findViewById(checkedViewList.get(0)));
+            }
         }
-        else if (currentQuizCard.getType() == QuizCard.QuizType.CHECKBOX && !checkedViewList.isEmpty()) {
-            //check all checked checkboxes
-            for (Integer checkedViewId : checkedViewList) {
-                CheckBox checkbox = findViewById(checkedViewId);
-                checkbox.setChecked(true); //ToDo: make sure that this doesn't fire the onClick method (checkboxChecked)
-                checkboxChecked(findViewById(checkedViewId));
+        else if (currentQuizCard.getType() == QuizCard.QuizType.CHECKBOX) {
+            if(checkedViewList != null && !checkedViewList.isEmpty()) {
+                //check all checked checkboxes that were checked before the orientation change
+                checkCheckboxViews(checkedViewList);
             }
         }//if the current card is an EditText quiz
         else if (currentQuizCard.getType() == QuizCard.QuizType.TEXTENTRY) {
@@ -597,10 +635,13 @@ public class MainActivity extends AppCompatActivity {
             String editTextMessage = savedState.getString("editTextMessage");
             //if the EditText contained text data, reinstate that information and enable the submit button
             if (editTextMessage != null && !editTextMessage.isEmpty()) {
-                EditText editText = findViewById(R.id.edit_text);
-                editText.setText(editTextMessage); //unnecessary since EditText automatically retains text for orientation change
+                EditText editText = findViewById(mEditTextViews.get(0));
+                editText.setText(editTextMessage); //Note: This is optional, since EditText automatically retains text for orientation change
                 findViewById(R.id.submit_button).setEnabled(true);
             }
         }
     }
 }
+
+//Note: All images from the World Wildlife Fund (https://www.worldwildlife.org/)
+//      Please visit their website to make a donation.

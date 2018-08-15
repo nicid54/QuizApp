@@ -11,7 +11,6 @@
         android:layout_height="@dimen/fill_layout_weight"
         android:padding="@dimen/question_padding"
         android:layout_weight="15"
-        android:text="Question"
         android:textStyle="bold"
         android:textAlignment="center"
         android:gravity="center_vertical"
@@ -23,7 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/fill_layout_weight"
         android:layout_weight="45"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/card_image_desc"/>
 
     <RelativeLayout
         android:id="@+id/card_answers"
@@ -39,7 +39,6 @@
             android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/text_margin_left"
             android:layout_marginTop="@dimen/text_margin_top"
-            android:text="Answer 1"
             android:onClick="radioButtonChecked"/>
 
         <RadioButton
@@ -50,7 +49,6 @@
             android:layout_marginRight="@dimen/text_margin_right"
             android:layout_marginTop="@dimen/text_margin_top"
             android:layout_alignParentRight="true"
-            android:text="Answer 2"
             android:onClick="radioButtonChecked"/>
 
         <RadioButton
@@ -61,7 +59,6 @@
             android:layout_below="@id/radio_button1"
             android:layout_marginLeft="@dimen/text_margin_left"
             android:layout_marginTop="@dimen/text_margin_top"
-            android:text="Answer 3"
             android:onClick="radioButtonChecked"/>
 
         <RadioButton
@@ -72,7 +69,6 @@
             android:layout_marginRight="@dimen/text_margin_right"
             android:layout_marginTop="@dimen/text_margin_top"
             android:layout_alignParentRight="true"
-            android:text="Answer 4"
             android:onClick="radioButtonChecked"/>
 
         <CheckBox
@@ -94,7 +90,6 @@
             android:layout_alignParentTop="true"
             android:layout_marginRight="@dimen/text_margin_right"
             android:layout_marginTop="@dimen/text_margin_top"
-            android:text="Answer 2"
             android:onClick="checkboxChecked"/>
 
         <CheckBox
@@ -105,7 +100,6 @@
             android:layout_below="@id/checkbox1"
             android:layout_marginLeft="@dimen/text_margin_left"
             android:layout_marginTop="@dimen/text_margin_top"
-            android:text="Answer 3"
             android:onClick="checkboxChecked"/>
 
         <CheckBox
@@ -116,7 +110,6 @@
             android:layout_marginRight="@dimen/text_margin_right"
             android:layout_marginTop="@dimen/text_margin_top"
             android:layout_alignParentRight="true"
-            android:text="Answer 4"
             android:onClick="checkboxChecked"/>
 
         <EditText
@@ -138,7 +131,6 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="@dimen/submit_margin_bottom"
-        android:text="Submit"
         android:onClick="submitButtonClicked"/>
 
 </LinearLayout>
